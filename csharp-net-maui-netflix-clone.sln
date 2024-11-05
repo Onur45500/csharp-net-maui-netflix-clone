@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csharp-net-maui-netflix-clone", "csharp-net-maui-netflix-clone\csharp-net-maui-netflix-clone.csproj", "{43CE9936-9730-461A-8D65-CBF359A13849}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{43CE9936-9730-461A-8D65-CBF359A13849}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43CE9936-9730-461A-8D65-CBF359A13849}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43CE9936-9730-461A-8D65-CBF359A13849}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{43CE9936-9730-461A-8D65-CBF359A13849}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43CE9936-9730-461A-8D65-CBF359A13849}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43CE9936-9730-461A-8D65-CBF359A13849}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {34D9F90D-9372-4DEE-A377-7317657906E1}
+	EndGlobalSection
+EndGlobal
