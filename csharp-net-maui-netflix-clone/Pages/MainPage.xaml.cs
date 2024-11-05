@@ -1,4 +1,4 @@
-﻿namespace csharp_net_maui_netflix_clone
+﻿namespace csharp_net_maui_netflix_clone.Pages
 {
     public partial class MainPage : ContentPage
     {
