@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.Maui.ApplicationModel.Permissions;
 
 namespace csharp_net_maui_netflix_clone.Services
 {
+    
+
     public class TmdbService
     {
         private const string ApiKey = "";
@@ -20,6 +23,13 @@ namespace csharp_net_maui_netflix_clone.Services
         }
 
         private HttpClient HttpClient => _httpClientFactory.CreateClient(TmdbHttpClientName);
+
+        public async Task<IEnumerable<Result>> GetTrending()
+        {
+            var trendingMoviesCollections = await HttpClient.GetFromJsonAsync<Movie>($"{TmdbUrls.Trending}&api_key={ApiKey}");
+
+            return trendingMoviesCollections.results;
+        }
     }
 
     public static class TmdbUrls
