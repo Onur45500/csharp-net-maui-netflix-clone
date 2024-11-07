@@ -24,7 +24,7 @@ namespace csharp_net_maui_netflix_clone.Services
 
         private HttpClient HttpClient => _httpClientFactory.CreateClient(TmdbHttpClientName);
 
-        public async Task<IEnumerable<Result>> GetTrending()
+        public async Task<IEnumerable<Result>> GetTrendingAsync()
         {
             var trendingMoviesCollections = await HttpClient.GetFromJsonAsync<Movie>($"{TmdbUrls.Trending}&api_key={ApiKey}");
 

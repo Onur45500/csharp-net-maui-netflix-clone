@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui;
+using csharp_net_maui_netflix_clone.Pages;
 using csharp_net_maui_netflix_clone.Services;
 using Microsoft.Extensions.Logging;
 
@@ -25,6 +26,7 @@ namespace csharp_net_maui_netflix_clone
                 httpClient => httpClient.BaseAddress = new Uri("http://api.themoviedb.org"));
 
             builder.Services.AddSingleton<TmdbService>();
+            builder.Services.AddSingleton<MainPage>();
 
             return builder.Build();
         }
