@@ -24,6 +24,8 @@ namespace csharp_net_maui_netflix_clone
             builder.Services.AddHttpClient(TmdbService.TmdbHttpClientName,
                 httpClient => httpClient.BaseAddress = new Uri("http://api.themoviedb.org"));
 
+            builder.Services.AddSingleton<TmdbService>();
+
             return builder.Build();
         }
     }
