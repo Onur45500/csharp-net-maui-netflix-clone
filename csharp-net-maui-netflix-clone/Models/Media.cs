@@ -24,6 +24,6 @@ namespace csharp_net_maui_netflix_clone.Models
         public string Thumbnail => $"https://image.tmdb.org/t/p/w600_and_h900_bestv2/{ThumbnailPath}";
         public string ThumbnailSmall => $"https://image.tmdb.org/t/p/w220_and_h330_face/{ThumbnailPath}";
         public string ThumbnailUrl => $"https://image.tmdb.org/t/p/original/{ThumbnailPath}";
-        public string DisplayTitle => title ?? name ?? original_title ?? original_name;
+        public string DisplayTitle { get; set; }
     }
 }
