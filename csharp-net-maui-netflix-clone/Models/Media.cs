@@ -9,6 +9,7 @@ namespace csharp_net_maui_netflix_clone.Models
     public class Media
     {
         public string backdrop_path { get; set; }
+        public string MediaType { get; set; }
         public int[] genre_ids { get; set; }
         public int id { get; set; }
         public string original_title { get; set; }
