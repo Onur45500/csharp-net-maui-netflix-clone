@@ -25,17 +25,17 @@ namespace csharp_net_maui_netflix_clone.Services
             }
         }
 
-        public async Task<IEnumerable<Result>> GetTrendingAsync()
+        public async Task<IEnumerable<Media>> GetTrendingAsync()
         {
             try
             {
                 var trendingMoviesCollections = await HttpClient.GetFromJsonAsync<Movie>($"{TmdbUrls.Trending}");
-                return trendingMoviesCollections.results;
+                return trendingMoviesCollections.results.Select(r => r.ToMediaObject());
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
-                return Enumerable.Empty<Result>();
+                return Enumerable.Empty<Media>();
             }
         }
     }
