@@ -31,6 +31,33 @@ namespace csharp_net_maui_netflix_clone.ViewModels
                     Trending.Add(trending);
                 }
             }
+
+            var topRatedList = await _tmdbService.GetTopRatedAsync();
+            if(topRatedList?.Any() == true)
+            {
+                foreach(var topRated in topRatedList)
+                {
+                    TopRated.Add(topRated);
+                }
+            }
+
+            var netflixOriginalsList = await _tmdbService.GetNetflixOriginalsAsync();
+            if(netflixOriginalsList?.Any() == true)
+            {
+                foreach(var netflixOriginal in netflixOriginalsList)
+                {
+                    NetflixOriginals.Add(netflixOriginal);
+                }
+            }
+
+            var actionMoviesList = await _tmdbService.GetActionMoviesAsync();
+            if(actionMoviesList?.Any() == true)
+            {
+                foreach(var actionMovie in actionMoviesList)
+                {
+                    ActionMovies.Add(actionMovie);
+                }
+            }
         }
     }
 }
