@@ -17,8 +17,19 @@ namespace csharp_net_maui_netflix_clone.Pages
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-            var trending = await _tmdbService.GetTrendingAsync();
+            try
+            {
+                var trending = await _tmdbService.GetTrendingAsync();
+                // Use the trending data as needed
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception
+                Console.WriteLine($"Error: {ex.Message}");
+            }
         }
+
+
         private void OnCounterClicked(object sender, EventArgs e)
         {
             count++;

@@ -8,12 +8,10 @@ using static Microsoft.Maui.ApplicationModel.Permissions;
 
 namespace csharp_net_maui_netflix_clone.Services
 {
-    
-
     public class TmdbService
     {
-        private const string ApiKey = "";
-        public const string TmdbHttpClientName = "TmdbCleint";
+        private const string BearerToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NWVmNzYyOTY0NjU5ZmQyODU5NTUwZDllZjljZGVjYSIsIm5iZiI6MTczMTIzNDU4My41NTIyMjYzLCJzdWIiOiI2NzJhMzAyNTI2YjYwNWJjMTllNTdiODciLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.VmG-W3sP1EQ8uEHctChqb1O5NcpZI5daD_ZPeEtr8Lc";
+        public const string TmdbHttpClientName = "TmdbClient";
 
         private readonly IHttpClientFactory _httpClientFactory;
 
@@ -22,15 +20,31 @@ namespace csharp_net_maui_netflix_clone.Services
             _httpClientFactory = httpClientFactory;
         }
 
-        private HttpClient HttpClient => _httpClientFactory.CreateClient(TmdbHttpClientName);
+        private HttpClient HttpClient
+        {
+            get
+            {
+                var client = _httpClientFactory.CreateClient(TmdbHttpClientName);
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", BearerToken);
+                return client;
+            }
+        }
 
         public async Task<IEnumerable<Result>> GetTrendingAsync()
         {
-            var trendingMoviesCollections = await HttpClient.GetFromJsonAsync<Movie>($"{TmdbUrls.Trending}&api_key={ApiKey}");
-
-            return trendingMoviesCollections.results;
+            try
+            {
+                var trendingMoviesCollections = await HttpClient.GetFromJsonAsync<Movie>($"{TmdbUrls.Trending}");
+                return trendingMoviesCollections.results;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return Enumerable.Empty<Result>();
+            }
         }
     }
+
 
     public static class TmdbUrls
     {
@@ -55,22 +69,26 @@ namespace csharp_net_maui_netflix_clone.Services
     public class Result
     {
         public string backdrop_path { get; set; }
-        public int[] genre_ids { get; set; }
         public int id { get; set; }
+        public string title { get; set; }
         public string original_title { get; set; }
-        public string original_name { get; set; }
         public string overview { get; set; }
         public string poster_path { get; set; }
-        public string release_date { get; set; }
-        public string title { get; set; }
-        public string name { get; set; }
+        public string media_type { get; set; }
+        public bool adult { get; set; }
+        public string original_language { get; set; }
+        public int[] genre_ids { get; set; }
+        public float popularity { get; set; }
+        public DateTime release_date { get; set; } // "movie" or "tv"
         public bool video { get; set; }
-        public string media_type { get; set; } // "movie" or "tv"
+        public float vote_average { get; set; }
+        public int vote_count { get; set; }
+
         public string ThumbnailPath => poster_path ?? backdrop_path;
         public string Thumbnail => $"https://image.tmdb.org/t/p/w600_and_h900_bestv2/{ThumbnailPath}";
         public string ThumbnailSmall => $"https://image.tmdb.org/t/p/w220_and_h330_face/{ThumbnailPath}";
         public string ThumbnailUrl => $"https://image.tmdb.org/t/p/original/{ThumbnailPath}";
-        public string DisplayTitle => title ?? name ?? original_title ?? original_name;
+        public string DisplayTitle => title ?? original_title;
 
         //public Media ToMediaObject() =>
         //    new()
