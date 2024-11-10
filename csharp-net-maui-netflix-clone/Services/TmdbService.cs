@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using csharp_net_maui_netflix_clone.Models;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.Maui.ApplicationModel.Permissions;
 
 namespace csharp_net_maui_netflix_clone.Services
 {
@@ -90,18 +85,18 @@ namespace csharp_net_maui_netflix_clone.Services
         public string ThumbnailUrl => $"https://image.tmdb.org/t/p/original/{ThumbnailPath}";
         public string DisplayTitle => title ?? original_title;
 
-        //public Media ToMediaObject() =>
-        //    new()
-        //    {
-        //        Id = id,
-        //        DisplayTitle = DisplayTitle,
-        //        MediaType = media_type,
-        //        Overview = overview,
-        //        ReleaseDate = release_date,
-        //        Thumbnail = Thumbnail,
-        //        ThumbnailSmall = ThumbnailSmall,
-        //        ThumbnailUrl = ThumbnailUrl
-        //    };
+        public Media ToMediaObject() =>
+            new Media()
+            {
+                Id = id,
+                DisplayTitle = DisplayTitle,
+                MediaType = media_type,
+                OverView = overview,
+                ReleaseDate = release_date,
+                Thumbnail = Thumbnail,
+                ThumbnailSmall = ThumbnailSmall,
+                ThumbnailUrl = ThumbnailUrl
+            };
     }
 
 
