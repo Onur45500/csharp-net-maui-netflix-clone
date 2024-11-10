@@ -25,11 +25,11 @@ namespace csharp_net_maui_netflix_clone.Services
             }
         }
 
-        public async Task<IEnumerable<Media>> GetTrendingAsync()
+        public async Task<IEnumerable<Media>> GetMediaAsync(string url)
         {
             try
             {
-                var trendingMoviesCollections = await HttpClient.GetFromJsonAsync<Movie>($"{TmdbUrls.Trending}");
+                var trendingMoviesCollections = await HttpClient.GetFromJsonAsync<Movie>($"{url}");
                 return trendingMoviesCollections.results.Select(r => r.ToMediaObject());
             }
             catch (Exception ex)
@@ -38,6 +38,19 @@ namespace csharp_net_maui_netflix_clone.Services
                 return Enumerable.Empty<Media>();
             }
         }
+
+        public async Task<IEnumerable<Media>> GetTrendingAsync() =>
+            await GetMediaAsync(TmdbUrls.Trending);
+
+        public async Task<IEnumerable<Media>> GetTopRatedAsync() =>
+            await GetMediaAsync(TmdbUrls.TopRated);
+
+        public async Task<IEnumerable<Media>> GetNetflixOriginalsAsync() =>
+            await GetMediaAsync(TmdbUrls.NetflixOriginals);
+
+        public async Task<IEnumerable<Media>> GetActionMoviesAsync() =>
+            await GetMediaAsync(TmdbUrls.Action);
+
     }
 
 
