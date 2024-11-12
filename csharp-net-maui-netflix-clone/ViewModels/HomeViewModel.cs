@@ -23,8 +23,18 @@ namespace csharp_net_maui_netflix_clone.ViewModels
 
         public async Task InitializeAsync()
         {
+
             var trendingList = await _tmdbService.GetTrendingAsync();
-            if(trendingList?.Any() == true)
+            var topRatedList = await _tmdbService.GetTopRatedAsync();
+            var netflixOriginalsList = await _tmdbService.GetNetflixOriginalsAsync();
+            var actionMoviesList = await _tmdbService.GetActionMoviesAsync();
+
+            var medias = await Task.WhenAll(trendingList,
+                topRatedList,
+                netflixOriginalsList,
+                actionMoviesList);
+
+            if (trendingList?.Any() == true)
             {
                 foreach(var trending in trendingList)
                 {
@@ -32,7 +42,7 @@ namespace csharp_net_maui_netflix_clone.ViewModels
                 }
             }
 
-            var topRatedList = await _tmdbService.GetTopRatedAsync();
+            
             if(topRatedList?.Any() == true)
             {
                 foreach(var topRated in topRatedList)
@@ -41,7 +51,7 @@ namespace csharp_net_maui_netflix_clone.ViewModels
                 }
             }
 
-            var netflixOriginalsList = await _tmdbService.GetNetflixOriginalsAsync();
+            
             if(netflixOriginalsList?.Any() == true)
             {
                 foreach(var netflixOriginal in netflixOriginalsList)
@@ -50,7 +60,7 @@ namespace csharp_net_maui_netflix_clone.ViewModels
                 }
             }
 
-            var actionMoviesList = await _tmdbService.GetActionMoviesAsync();
+            
             if(actionMoviesList?.Any() == true)
             {
                 foreach(var actionMovie in actionMoviesList)
