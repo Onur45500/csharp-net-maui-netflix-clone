@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.Maui.ApplicationModel.Permissions;
+using System.Net.Http.Json;
+
 
 namespace csharp_net_maui_netflix_clone.Services
 {
@@ -32,6 +34,11 @@ namespace csharp_net_maui_netflix_clone.Services
         public static string GetTrailers(int movieId, string type = "movie") => $"3/{type ?? "movie"}/{movieId}/videos?language=en-US";
         public static string GetMovieDetails(int movieId, string type = "movie") => $"3/{type ?? "movie"}/{movieId}?language=en-US";
         public static string GetSimilar(int movieId, string type = "movie") => $"3/{type ?? "movie"}/{movieId}/similar?language=en-US";
+
+        public async Task<IEnumerable<Result>> GetTrending()
+        {
+            var await = await HttpClient.GetFromJsonAsync<Movie>($"{Trending}");
+        }
     }
 
     public class Movie
@@ -62,18 +69,18 @@ namespace csharp_net_maui_netflix_clone.Services
         public string ThumbnailUrl => $"https://image.tmdb.org/t/p/original/{ThumbnailPath}";
         public string DisplayTitle => title ?? name ?? original_title ?? original_name;
 
-        //public Media ToMediaObject() =>
-        //    new()
-        //    {
-        //        Id = id,
-        //        DisplayTitle = DisplayTitle,
-        //        MediaType = media_type,
-        //        Overview = overview,
-        //        ReleaseDate = release_date,
-        //        Thumbnail = Thumbnail,
-        //        ThumbnailSmall = ThumbnailSmall,
-        //        ThumbnailUrl = ThumbnailUrl
-        //    };
+        public Media ToMediaObject() =>
+            new()
+            {
+                Id = id,
+                DisplayTitle = DisplayTitle,
+                MediaType = media_type,
+                Overview = overview,
+                ReleaseDate = release_date,
+                Thumbnail = Thumbnail,
+                ThumbnailSmall = ThumbnailSmall,
+                ThumbnailUrl = ThumbnailUrl
+            };
     }
 
 
