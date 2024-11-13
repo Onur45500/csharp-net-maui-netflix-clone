@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.Maui.ApplicationModel.Permissions;
+﻿using csharp_net_maui_netflix_clone.Models;
 using System.Net.Http.Json;
-
 
 namespace csharp_net_maui_netflix_clone.Services
 {
     public class TmdbService
     {
-        private const string ApiKey = "";
-        public const string TmdbHttpClientName = "TmdbCleint";
+        private const string BearerToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NWVmNzYyOTY0NjU5ZmQyODU5NTUwZDllZjljZGVjYSIsIm5iZiI6MTczMTIzNDU4My41NTIyMjYzLCJzdWIiOiI2NzJhMzAyNTI2YjYwNWJjMTllNTdiODciLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.VmG-W3sP1EQ8uEHctChqb1O5NcpZI5daD_ZPeEtr8Lc";
+        public const string TmdbHttpClientName = "TmdbClient";
 
         private readonly IHttpClientFactory _httpClientFactory;
 
@@ -21,8 +15,44 @@ namespace csharp_net_maui_netflix_clone.Services
             _httpClientFactory = httpClientFactory;
         }
 
-        private HttpClient HttpClient => _httpClientFactory.CreateClient(TmdbHttpClientName);
+        private HttpClient HttpClient
+        {
+            get
+            {
+                var client = _httpClientFactory.CreateClient(TmdbHttpClientName);
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", BearerToken);
+                return client;
+            }
+        }
+
+        public async Task<IEnumerable<Media>> GetMediaAsync(string url)
+        {
+            try
+            {
+                var trendingMoviesCollections = await HttpClient.GetFromJsonAsync<Movie>($"{url}");
+                return trendingMoviesCollections.results.Select(r => r.ToMediaObject());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return Enumerable.Empty<Media>();
+            }
+        }
+
+        public async Task<IEnumerable<Media>> GetTrendingAsync() =>
+            await GetMediaAsync(TmdbUrls.Trending);
+
+        public async Task<IEnumerable<Media>> GetTopRatedAsync() =>
+            await GetMediaAsync(TmdbUrls.TopRated);
+
+        public async Task<IEnumerable<Media>> GetNetflixOriginalsAsync() =>
+            await GetMediaAsync(TmdbUrls.NetflixOriginals);
+
+        public async Task<IEnumerable<Media>> GetActionMoviesAsync() =>
+            await GetMediaAsync(TmdbUrls.Action);
+
     }
+
 
     public static class TmdbUrls
     {
@@ -34,11 +64,6 @@ namespace csharp_net_maui_netflix_clone.Services
         public static string GetTrailers(int movieId, string type = "movie") => $"3/{type ?? "movie"}/{movieId}/videos?language=en-US";
         public static string GetMovieDetails(int movieId, string type = "movie") => $"3/{type ?? "movie"}/{movieId}?language=en-US";
         public static string GetSimilar(int movieId, string type = "movie") => $"3/{type ?? "movie"}/{movieId}/similar?language=en-US";
-
-        public async Task<IEnumerable<Result>> GetTrending()
-        {
-            var await = await HttpClient.GetFromJsonAsync<Movie>($"{Trending}");
-        }
     }
 
     public class Movie
@@ -52,30 +77,34 @@ namespace csharp_net_maui_netflix_clone.Services
     public class Result
     {
         public string backdrop_path { get; set; }
-        public int[] genre_ids { get; set; }
         public int id { get; set; }
+        public string title { get; set; }
         public string original_title { get; set; }
-        public string original_name { get; set; }
         public string overview { get; set; }
         public string poster_path { get; set; }
-        public string release_date { get; set; }
-        public string title { get; set; }
-        public string name { get; set; }
+        public string media_type { get; set; }
+        public bool adult { get; set; }
+        public string original_language { get; set; }
+        public int[] genre_ids { get; set; }
+        public float popularity { get; set; }
+        public DateTime release_date { get; set; } // "movie" or "tv"
         public bool video { get; set; }
-        public string media_type { get; set; } // "movie" or "tv"
+        public float vote_average { get; set; }
+        public int vote_count { get; set; }
+
         public string ThumbnailPath => poster_path ?? backdrop_path;
         public string Thumbnail => $"https://image.tmdb.org/t/p/w600_and_h900_bestv2/{ThumbnailPath}";
         public string ThumbnailSmall => $"https://image.tmdb.org/t/p/w220_and_h330_face/{ThumbnailPath}";
         public string ThumbnailUrl => $"https://image.tmdb.org/t/p/original/{ThumbnailPath}";
-        public string DisplayTitle => title ?? name ?? original_title ?? original_name;
+        public string DisplayTitle => title ?? original_title;
 
         public Media ToMediaObject() =>
-            new()
+            new Media()
             {
                 Id = id,
                 DisplayTitle = DisplayTitle,
                 MediaType = media_type,
-                Overview = overview,
+                OverView = overview,
                 ReleaseDate = release_date,
                 Thumbnail = Thumbnail,
                 ThumbnailSmall = ThumbnailSmall,
